@@ -41,7 +41,7 @@
         this.GoogleChartLoader.then(function (googleInstance) {
             self.google = googleInstance;
             self.chartType = self.$attrs['googleChart'];
-            self.chartOptionsStr = self.$attrs['googleChartOptions'];
+            self.chartOptionsStr = self.$attrs['gcOptions'];
             self.controllerReadyDefer.resolve(self.google);
         })
     };

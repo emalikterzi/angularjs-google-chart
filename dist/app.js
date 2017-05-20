@@ -7,37 +7,37 @@ window['googleChartEvents$$'] = {};
         ANIMATION_FINISH: {
             eventName: 'animationfinish',
             eventMethod: 'onDefault',
-            directiveName: 'googleChartAnimationFinish'
+            directiveName: 'gceAnimationFinish'
         },
         ON_MOUSE_OUT: {
             eventName: 'onmouseout',
             eventMethod: 'onDefault',
-            directiveName: 'googleChartOnMouseOut'
+            directiveName: 'gceOnMouseOut'
         },
         ON_MOUSE_OVER: {
             eventName: 'onmouseover',
             eventMethod: 'onDefault',
-            directiveName: 'googleChartOnMouseOver'
+            directiveName: 'gceOnMouseOver'
         },
         RANGE_CHANGE: {
             eventName: 'rangechange',
             eventMethod: 'onDefault',
-            directiveName: 'googleChartRangeChange'
+            directiveName: 'gceRangeChange'
         },
         CLICK: {
             eventName: 'click',
             eventMethod: 'onDefault',
-            directiveName: 'googleChartClick'
+            directiveName: 'gceClick'
         },
         SELECT: {
             eventName: 'select',
             eventMethod: 'onSelect',
-            directiveName: 'googleChartSelect'
+            directiveName: 'gceSelect'
         },
         READY: {
             eventName: 'ready',
             eventMethod: 'onDefault',
-            directiveName: 'googleChartReady'
+            directiveName: 'gceReady'
         }
     }
 })(window['googleChartEvents$$']);
@@ -186,7 +186,7 @@ window['googleChartEvents$$'] = {};
     angular.module('angularjs-google-chart').provider('GoogleChartLoader', ChartProviderFn);
 
     function ChartProviderFn() {
-        this.$get = ["GoogleChartHelper", "$q", "GoogleChartConfig", function (GoogleChartHelper, $q, GoogleChartConfig) {
+        this.$get = ["GoogleChartHelper", "$q", "GoogleChartLoaderConfig", function (GoogleChartHelper, $q, GoogleChartLoaderConfig) {
             var loaderUrl = 'https://www.gstatic.com/charts/loader.js';
             var promise = GoogleChartHelper.loadJs(loaderUrl);
 
@@ -196,13 +196,15 @@ window['googleChartEvents$$'] = {};
                     return $q.reject("Google charts library loader not present.");
                 }
                 var deferred = $q.defer();
-                if (GoogleChartConfig.version && GoogleChartConfig.options && GoogleChartConfig.options.packages
-                    && GoogleChartConfig.options.packages.length > 0) {
-                    google.charts.load(GoogleChartConfig.version, GoogleChartConfig.options);
+                if (GoogleChartLoaderConfig.version && GoogleChartLoaderConfig.options
+                    && GoogleChartLoaderConfig.options.packages
+                    && GoogleChartLoaderConfig.options.packages.length > 0) {
+                    google.charts.load(GoogleChartLoaderConfig.version, GoogleChartLoaderConfig.options);
                     google.charts.setOnLoadCallback(function () {
                         deferred.resolve(google);
                     })
                 } else {
+                    console.log('here2');
                     deferred.resolve(google);
                 }
                 return deferred.promise;
@@ -210,7 +212,7 @@ window['googleChartEvents$$'] = {};
 
             return promise.then(scriptLoadCallback);
         }];
-        this.$get.$inject = ['GoogleChartHelper', '$q', 'GoogleChartConfig']
+        this.$get.$inject = ['GoogleChartHelper', '$q', 'GoogleChartLoaderConfig']
     }
 })();
 /**
@@ -221,12 +223,15 @@ window['googleChartEvents$$'] = {};
     angular.module('angularjs-google-chart')
         .run(googleChartRun);
 
-    googleChartRun.$inject = ['$rootScope', '$window','GoogleChartConfig'];
-    function googleChartRun($rootScope, $window,GoogleChartConfig) {
+    googleChartRun.$inject = ['$rootScope', '$window', 'GoogleChartConfig', 'GoogleChartLoader'];
+    function googleChartRun($rootScope, $window, GoogleChartConfig, GoogleChartLoader) {
 
-        angular.element($window).on('resize', function () {
-            $rootScope.$emit(GoogleChartConfig.windowResizeEvent);
-        });
+        GoogleChartLoader.then(function () {
+            angular.element($window).on('resize', function () {
+                $rootScope.$emit(GoogleChartConfig.windowResizeEvent);
+            });
+        })
+
     }
 })();
 /**
@@ -573,7 +578,7 @@ window['googleChartEvents$$'] = {};
         this.GoogleChartLoader.then(function (googleInstance) {
             self.google = googleInstance;
             self.chartType = self.$attrs['googleChart'];
-            self.chartOptionsStr = self.$attrs['googleChartOptions'];
+            self.chartOptionsStr = self.$attrs['gcOptions'];
             self.controllerReadyDefer.resolve(self.google);
         })
     };
@@ -702,7 +707,7 @@ window['googleChartEvents$$'] = {};
  */
 (function () {
 
-    angular.module('angularjs-google-chart').directive('googleChartData', GoogleChartDataDirectiveFn);
+    angular.module('angularjs-google-chart').directive('gcData', GoogleChartDataDirectiveFn);
 
     GoogleChartDataDirectiveFn.$inject = ['$parse'];
 
@@ -712,9 +717,7 @@ window['googleChartEvents$$'] = {};
             scope: false,
             require: "googleChart",
             link: function ($scope, $element, $attr, googleChartCtrl) {
-                var chartDataStr = $attr['googleChartData'];
-
-
+                var chartDataStr = $attr['gcData'];
                 if (!chartDataStr && chartDataStr === "")
                     throw 'Chart data cannot be empty';
 

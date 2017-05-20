@@ -3,7 +3,7 @@
  */
 (function () {
 
-    angular.module('angularjs-google-chart').directive('googleChartData', GoogleChartDataDirectiveFn);
+    angular.module('angularjs-google-chart').directive('gcData', GoogleChartDataDirectiveFn);
 
     GoogleChartDataDirectiveFn.$inject = ['$parse'];
 
@@ -13,9 +13,7 @@
             scope: false,
             require: "googleChart",
             link: function ($scope, $element, $attr, googleChartCtrl) {
-                var chartDataStr = $attr['googleChartData'];
-
-
+                var chartDataStr = $attr['gcData'];
                 if (!chartDataStr && chartDataStr === "")
                     throw 'Chart data cannot be empty';
 

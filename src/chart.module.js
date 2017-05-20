@@ -7,37 +7,37 @@ window['googleChartEvents$$'] = {};
         ANIMATION_FINISH: {
             eventName: 'animationfinish',
             eventMethod: 'onDefault',
-            directiveName: 'googleChartAnimationFinish'
+            directiveName: 'gceAnimationFinish'
         },
         ON_MOUSE_OUT: {
             eventName: 'onmouseout',
             eventMethod: 'onDefault',
-            directiveName: 'googleChartOnMouseOut'
+            directiveName: 'gceOnMouseOut'
         },
         ON_MOUSE_OVER: {
             eventName: 'onmouseover',
             eventMethod: 'onDefault',
-            directiveName: 'googleChartOnMouseOver'
+            directiveName: 'gceOnMouseOver'
         },
         RANGE_CHANGE: {
             eventName: 'rangechange',
             eventMethod: 'onDefault',
-            directiveName: 'googleChartRangeChange'
+            directiveName: 'gceRangeChange'
         },
         CLICK: {
             eventName: 'click',
             eventMethod: 'onDefault',
-            directiveName: 'googleChartClick'
+            directiveName: 'gceClick'
         },
         SELECT: {
             eventName: 'select',
             eventMethod: 'onSelect',
-            directiveName: 'googleChartSelect'
+            directiveName: 'gceSelect'
         },
         READY: {
             eventName: 'ready',
             eventMethod: 'onDefault',
-            directiveName: 'googleChartReady'
+            directiveName: 'gceReady'
         }
     }
 })(window['googleChartEvents$$']);

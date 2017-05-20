@@ -6,11 +6,14 @@
     angular.module('angularjs-google-chart')
         .run(googleChartRun);
 
-    googleChartRun.$inject = ['$rootScope', '$window','GoogleChartConfig'];
-    function googleChartRun($rootScope, $window,GoogleChartConfig) {
+    googleChartRun.$inject = ['$rootScope', '$window', 'GoogleChartConfig', 'GoogleChartLoader'];
+    function googleChartRun($rootScope, $window, GoogleChartConfig, GoogleChartLoader) {
 
-        angular.element($window).on('resize', function () {
-            $rootScope.$emit(GoogleChartConfig.windowResizeEvent);
-        });
+        GoogleChartLoader.then(function () {
+            angular.element($window).on('resize', function () {
+                $rootScope.$emit(GoogleChartConfig.windowResizeEvent);
+            });
+        })
+
     }
 })();
