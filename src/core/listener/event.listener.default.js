@@ -11,7 +11,6 @@
     }
 
     function DefaultEventListener() {
-
     }
 
     DefaultEventListener.prototype.onSelect = function (methodStr) {
@@ -21,7 +20,6 @@
             self.$scope.$eval(fixedMethod, {x: self.chart.getSelection(), y: self.chart})
         })
     };
-
     DefaultEventListener.prototype.onDefault = function () {
         var self = this;
         var methodStr = arguments[0];
@@ -42,53 +40,4 @@
             self.$scope.$eval(fixedMethod, context);
         })
     };
-
-    // DefaultEventListener.prototype.onReady = function (methodStr) {
-    //     var self = this;
-    //     var fixedMethod = self.GoogleChartHelper.removeMethodAndAddParams(methodStr, null);
-    //     self.$scope.$apply(function () {
-    //         self.$scope.$eval(fixedMethod, null);
-    //     })
-    // };
-    //
-    // DefaultEventListener.prototype.onRangeChange = function (methodStr, $event) {
-    //     var self = this;
-    //     var fixedMethod = self.GoogleChartHelper.removeMethodAndAddParams(methodStr, "x");
-    //     self.$scope.$apply(function () {
-    //         self.$scope.$eval(fixedMethod, {"x": $event});
-    //     })
-    // };
-    //
-    // DefaultEventListener.prototype.onMouseOver = function (methodStr, $event) {
-    //     var self = this;
-    //     var fixedMethod = self.GoogleChartHelper.removeMethodAndAddParams(methodStr, "x");
-    //     self.$scope.$apply(function () {
-    //         self.$scope.$eval(fixedMethod, {"x": $event});
-    //     })
-    // };
-    // DefaultEventListener.prototype.onMouseOut = function (methodStr, $event) {
-    //     var self = this;
-    //     var fixedMethod = self.GoogleChartHelper.removeMethodAndAddParams(methodStr, "x");
-    //     self.$scope.$apply(function () {
-    //         self.$scope.$eval(fixedMethod, {"x": $event});
-    //     })
-    // };
-    //
-    // DefaultEventListener.prototype.onAnimationFinish = function (methodStr, $event) {
-    //     var self = this;
-    //     var fixedMethod = self.GoogleChartHelper.removeMethodAndAddParams(methodStr, "x");
-    //     self.$scope.$apply(function () {
-    //         self.$scope.$eval(fixedMethod, {"x": $event});
-    //     })
-    // };
-    //
-    // DefaultEventListener.prototype.onClick = function (methodStr, $event) {
-    //     var self = this;
-    //     var fixedMethod = self.GoogleChartHelper.removeMethodAndAddParams(methodStr, "x");
-    //     self.$scope.$apply(function () {
-    //         self.$scope.$eval(fixedMethod, {"x": $event});
-    //     })
-    // }
-
-
 })();

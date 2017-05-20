@@ -5,7 +5,8 @@
 
 var app = angular.module('app', ['angularjs-google-chart']);
 
-app.controller('TestController', function ($scope, $timeout, $interval) {
+app.controller('TestController', function ($scope, $timeout, $interval, GoogleChartService) {
+    console.dir(GoogleChartService);
 
     $scope.chart = {
         rows: [
@@ -21,6 +22,10 @@ app.controller('TestController', function ($scope, $timeout, $interval) {
         hAxis: {title: 'Year', titleTextStyle: {color: '#333'}},
         vAxis: {minValue: 0}
     };
+
+    $timeout(function () {
+        GoogleChartService.reDraw(13);
+    },1000)
 
     $scope.onSelect = function () {
         console.log('on click', arguments)

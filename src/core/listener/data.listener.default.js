@@ -33,7 +33,6 @@
                 self.drawAsync();
             }
         }, true);
-
         var optionsLsitner =
             self.$scope.$watch(self.chartOptionsStr, function (n) {
                 if (n && !angular.equals(self.chartOptions, n)) {
@@ -45,7 +44,6 @@
         self.watcherList.push(dataListener);
         return self.initialDefer.promise;
     };
-
     DefaultDataListener.prototype.drawAsync = function () {
         var self = this;
         if (self.data) {
@@ -54,11 +52,10 @@
             })
         }
     };
-
     DefaultDataListener.prototype.destroy = function () {
         var self = this;
         self.watcherList.forEach(function (each) {
-            console.log(each)
+            each();
         })
     }
 })();

@@ -5,11 +5,9 @@
 
     angular.module('angularjs-google-chart')
         .controller('GoogleChartController', GoogleChartControllerFn);
-
     GoogleChartControllerFn.$inject = ['$scope', '$element', 'GoogleChartLoader',
         '$timeout', 'GoogleChartConstants', 'GoogleChartLoaderConfig', '$attrs', '$q',
         '$injector', '$parse', '$rootScope', 'GoogleChartConfig', 'GoogleChartHelper'];
-
     function GoogleChartControllerFn(x, y, z, x1, a, b, c, d, e, f, g, h, i) {
         this.$scope = x;
         this.$element = y;
@@ -34,6 +32,7 @@
         this.chartOptionsStr = null;
         this.chart = null;
         this.chartDataStr = null;
+        this.chartId = new Date().getTime();
     }
 
     GoogleChartControllerFn.prototype.init = function () {
@@ -45,7 +44,6 @@
             self.controllerReadyDefer.resolve(self.google);
         })
     };
-
     GoogleChartControllerFn.prototype.dataInit = function (n, chartDataStr) {
         var self = this;
         self.chartDataStr = chartDataStr;
@@ -58,14 +56,12 @@
             self.determineChart();
         }
     };
-
     GoogleChartControllerFn.prototype.drawChart = function () {
         var self = this;
         if (self.dataListenerInstance) {
             self.dataListenerInstance.drawAsync();
         }
     };
-
     GoogleChartControllerFn.prototype.determineChart = function () {
         var self = this;
         if (!self.chartType || self.chartType.length <= 0) {
@@ -76,7 +72,6 @@
                 self.chartType = self.data['type'];
         }
         self.chartModule = self.GoogleChartConstants[self.chartType];
-
         if (!self.chartModule) {
             throw 'Unknown chart type';
         }
@@ -84,7 +79,6 @@
             self.setup();
         })
     };
-
     GoogleChartControllerFn.prototype.load = function () {
         var self = this;
         var defer = self.$q.defer();
@@ -108,28 +102,33 @@
         this.dataListenerInstance.listen();
 
     };
-
     GoogleChartControllerFn.prototype.setup = function () {
-
         var self = this;
         var strategyClass = (self.$injector.get(self.chartModule.strategy));
         var eventListenerClass = (self.$injector.get(self.chartModule.eventListener || "DefaultEventListener"));
         self.strategyInstance = new strategyClass(self.google, self.$element,
             self.$scope, self.GoogleChartConfig, self.GoogleChartHelper, self.chartModule, eventListenerClass);
-
         this.chart = self.strategyInstance.setupChart();
         self.chartReadyDefer.resolve(self.chart);
         self.strategyInstance.onChartReady(self.chart);
         self.initDataListener();
-
-        var deregister
+        var windowListener
             = self.$rootScope
             .$on(self.GoogleChartConfig.windowResizeEvent, function () {
                 self.drawChart()
             });
+        var reDrawListener = self.$rootScope
+            .$on(self.GoogleChartConfig.reDrawEvent, function (event, data) {
+                if (!data)
+                    self.drawChart();
+                else if (data && data == self.chartId) {
+                    self.drawChart();
+                }
+            });
 
         self.$scope.$on('$destroy', function () {
-            deregister();
+            windowListener();
+            reDrawListener();
             self.dataListenerInstance.destroy();
             self.strategyInstance.destroy();
         });

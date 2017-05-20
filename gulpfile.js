@@ -8,7 +8,7 @@ var
 gulp.task('build', build);
 gulp.task('default', ['build'], watchAll);
 
-var source = ['./src/chart.module.js', './src/core/**/*.js', './src/charts/*.js'];
+var source = ['./src/chart.global.js', './src/chart.module.js', './src/core/**/*.js', './src/charts/*.js'];
 
 function build() {
     return gulp.src(source)

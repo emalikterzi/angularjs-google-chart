@@ -12,7 +12,6 @@
         function DefaultDataTableStrategy() {
             DefaultChartStrategy.apply(this, arguments);
         }
-
         DefaultDataTableStrategy.prototype.setupData = function (rawData) {
             var self = this;
             var data = new self.google.visualization.DataTable();
@@ -22,7 +21,6 @@
             data.addRows(rawData.rows);
             return data;
         };
-
         DefaultDataTableStrategy.prototype.setupChart = function () {
             var self = this;
             this.chart = new this.google

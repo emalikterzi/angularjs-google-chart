@@ -2,11 +2,8 @@
  * Created by emt on 19.05.2017.
  */
 (function () {
-
     angular.module('angularjs-google-chart').directive('gcData', GoogleChartDataDirectiveFn);
-
     GoogleChartDataDirectiveFn.$inject = ['$parse'];
-
     function GoogleChartDataDirectiveFn($parse) {
         return {
             restrict: 'A',
@@ -16,7 +13,6 @@
                 var chartDataStr = $attr['gcData'];
                 if (!chartDataStr && chartDataStr === "")
                     throw 'Chart data cannot be empty';
-
                 googleChartCtrl.controllerReadyDefer.promise.then(function () {
                     var disable = $scope.$watch(chartDataStr, function (n) {
                         if (n) {
@@ -25,7 +21,6 @@
                         }
                     }, true)
                 })
-
             }
         }
     }

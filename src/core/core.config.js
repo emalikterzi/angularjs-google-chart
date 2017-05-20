@@ -6,6 +6,7 @@
 (function (x) {
     var GoogleChartConfig = {
         windowResizeEvent: '$$windowResizedGC',
+        reDrawEvent: '$$reDrawGC',
         events: x.events
     };
 

@@ -24,7 +24,6 @@
                         deferred.resolve(google);
                     })
                 } else {
-                    console.log('here2');
                     deferred.resolve(google);
                 }
                 return deferred.promise;

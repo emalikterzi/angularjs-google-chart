@@ -12,7 +12,6 @@
         function DefaultArrayToDataTable() {
             DefaultChartStrategy.apply(this, arguments);
         }
-
         DefaultArrayToDataTable.prototype.setupData = function (rawData) {
             var self = this;
             var data = new self.google.visualization.arrayToDataTable(rawData.rows);
@@ -23,8 +22,6 @@
             }
             return data;
         };
-
-
         return DefaultArrayToDataTable;
     }
 

@@ -42,7 +42,6 @@
             self.google.visualization.events.removeListener(each);
         })
     };
-
     DefaultChartStrategy.prototype.registerEvent = function (str, event) {
         var self = this;
         var eventListenerWrapper = new this.eventListenerClass(str, self.chart);
