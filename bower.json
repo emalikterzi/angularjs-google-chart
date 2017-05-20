@@ -1,0 +1,22 @@
+{
+  "name": "angularjs-google-chart",
+  "description": "Google Chart wrapper for angularjs",
+  "main": "dist/app.js",
+  "authors": [
+    "Enes Malik Terzi"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "angular",
+    "google",
+    "chart"
+  ],
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

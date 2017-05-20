@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html data-ng-app="app" lang="en">
+<head>
+    <script type="application/javascript" src="../../node_modules/angular/angular.js"></script>
+    <script type="application/javascript" src="../../dist/app.js"></script>
+    <script type="application/javascript" src="app.js"></script>
+
+</head>
+<body data-ng-controller="TestController">
+<div>
+
+    <div google-chart="Bar" google-chart-data="chart" google-chart-options="options"
+         google-chart-click="onClick()"
+         google-chart-select="onSelect()"
+         google-chart-ready="onReady()"
+         google-chart-on-mouse-over="mouseOver()"
+         google-chart-on-mouse-out="mouseOut()"
+         google-chart-animation-finish="animateFinish()"
+    ></div>
+
+</div>
+<!--<div id="chart_div"></div>-->
+</body>
+</html>
