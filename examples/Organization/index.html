@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html data-ng-app="app" lang="en">
+<head>
+    <script type="application/javascript" src="../../node_modules/angular/angular.js"></script>
+    <script type="application/javascript" src="../../dist/app.js"></script>
+    <script type="application/javascript" src="app.js"></script>
+
+</head>
+<body data-ng-controller="TestController">
+<div>
+
+    <div google-chart="Org"
+         gc-data="chart"
+         gc-options="options"
+         gce-collapse="collapse()"
+         gce-select="onSelect()"
+         gce-ready="onReady()"
+         gce-on-mouse-over="mouseOver()"
+         gce-on-mouse-out="mouseOut()"
+    ></div>
+
+</div>
+<!--<div id="chart_div"></div>-->
+</body>
+</html>

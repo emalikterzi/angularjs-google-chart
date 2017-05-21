@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html data-ng-app="app" lang="en">
+<head>
+    <script type="application/javascript" src="../../node_modules/angular/angular.js"></script>
+    <script type="application/javascript" src="../../dist/app.js"></script>
+    <script type="application/javascript" src="app.js"></script>
+
+</head>
+<body data-ng-controller="TestController">
+<div>
+
+    <div google-chart="Candlestick"
+         gc-data="chart"
+         gc-options="options"
+         gce-click="onClick()"
+         gce-select="onSelect()"
+         gce-ready="onReady()"
+         gce-on-mouse-over="mouseOver()"
+         gce-on-mouse-out="mouseOut()"
+         gce-animation-finish="animateFinish()"
+    ></div>
+
+</div>
+<!--<div id="chart_div"></div>-->
+</body>
+</html>

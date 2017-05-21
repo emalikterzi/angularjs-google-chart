@@ -7,40 +7,89 @@
 
         "Annotation": {
             moduleName: 'annotationchart',
-            strategy: 'DefaultDataTableStrategy',
             className: 'AnnotationChart',
             events: ['rangechange', 'select', 'ready']
         },
         "Area": {
             moduleName: 'corechart',
-            strategy: 'DefaultArrayToDataTable',
             className: 'AreaChart',
             events: ['animationfinish', 'select', 'ready', 'onmouseover', 'onmouseout', 'click']
 
         },
         "Bar": {
             moduleName: 'corechart',
-            strategy: 'DefaultArrayToDataTable',
             className: 'BarChart',
             events: ['animationfinish', 'select', 'ready', 'onmouseover', 'onmouseout', 'click']
         },
         "Bubble": {
             moduleName: 'corechart',
-            strategy: 'DefaultArrayToDataTable',
             className: 'BubbleChart',
             events: ['animationfinish', 'select', 'ready', 'onmouseover', 'onmouseout', 'click']
         },
         "Calendar": {
             moduleName: 'calendar',
-            strategy: 'DefaultDataTableStrategy',
             className: 'Calendar',
             events: ['select', 'ready', 'onmouseover', 'onmouseout']
         },
+        "Candlestick": {
+            moduleName: 'corechart',
+            className: 'CandlestickChart',
+            events: ['animationfinish', 'select', 'ready', 'onmouseover', 'onmouseout', 'click']
+        },
+        "Column": {
+            moduleName: 'corechart',
+            className: 'ColumnChart',
+            events: ['animationfinish', 'select', 'ready', 'onmouseover', 'onmouseout', 'click']
+        },
+        "Combo": {
+            moduleName: 'corechart',
+            className: 'ComboChart',
+            events: ['animationfinish', 'select', 'ready', 'onmouseover', 'onmouseout', 'click']
+        },
         "Gantt": {
             moduleName: 'gantt',
-            strategy: 'DefaultDataTableStrategy',
             className: 'Gantt',
             events: ['select', 'ready']
+        },
+        "Gauge": {
+            moduleName: 'gauge',
+            className: 'Gauge'
+        },
+        "GeoChart": {
+            moduleName: 'geochart',
+            className: 'GeoChart',
+            events: ['select', 'ready', 'regionClick']
+        },
+        "Histogram": {
+            moduleName: 'corechart',
+            className: 'Histogram',
+            events: ['animationfinish', 'select', 'ready', 'onmouseover', 'onmouseout', 'click']
+        },
+        "Line": {
+            moduleName: 'corechart',
+            className: 'LineChart',
+            events: ['animationfinish', 'select', 'ready', 'onmouseover', 'onmouseout', 'click']
+        },
+
+        "Map": {
+            moduleName: 'map',
+            className: 'Map',
+            events: ['select']
+        },
+        "Org": {
+            moduleName: 'orgchart',
+            className: 'OrgChart',
+            events: ['select', 'onmouseover', 'onmouseout', 'ready', 'collapse']
+        },
+        "Pie": {
+            moduleName: 'corechart',
+            className: 'PieChart',
+            events: ['animationfinish', 'select', 'ready', 'onmouseover', 'onmouseout', 'click']
+        },
+        "Sankey": {
+            moduleName: 'sankey',
+            className: 'Sankey',
+            events: ['select', 'ready', 'onmouseover', 'onmouseout']
         }
     };
 

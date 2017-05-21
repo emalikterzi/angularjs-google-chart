@@ -38,6 +38,16 @@ window['googleChartEvents$$'] = {};
             eventName: 'ready',
             eventMethod: 'onDefault',
             directiveName: 'gceReady'
+        },
+        REGION_CLICK: {
+            eventName: 'regionClick',
+            eventMethod: 'onDefault',
+            directiveName: 'gceRegionClick'
+        },
+        COLLAPSE: {
+            eventName: 'collapse',
+            eventMethod: 'onDefault',
+            directiveName: 'gceCollapse'
         }
     }
 })(window['googleChartEvents$$']);
@@ -73,40 +83,89 @@ window['googleChartEvents$$'] = {};
 
         "Annotation": {
             moduleName: 'annotationchart',
-            strategy: 'DefaultDataTableStrategy',
             className: 'AnnotationChart',
             events: ['rangechange', 'select', 'ready']
         },
         "Area": {
             moduleName: 'corechart',
-            strategy: 'DefaultArrayToDataTable',
             className: 'AreaChart',
             events: ['animationfinish', 'select', 'ready', 'onmouseover', 'onmouseout', 'click']
 
         },
         "Bar": {
             moduleName: 'corechart',
-            strategy: 'DefaultArrayToDataTable',
             className: 'BarChart',
             events: ['animationfinish', 'select', 'ready', 'onmouseover', 'onmouseout', 'click']
         },
         "Bubble": {
             moduleName: 'corechart',
-            strategy: 'DefaultArrayToDataTable',
             className: 'BubbleChart',
             events: ['animationfinish', 'select', 'ready', 'onmouseover', 'onmouseout', 'click']
         },
         "Calendar": {
             moduleName: 'calendar',
-            strategy: 'DefaultDataTableStrategy',
             className: 'Calendar',
             events: ['select', 'ready', 'onmouseover', 'onmouseout']
         },
+        "Candlestick": {
+            moduleName: 'corechart',
+            className: 'CandlestickChart',
+            events: ['animationfinish', 'select', 'ready', 'onmouseover', 'onmouseout', 'click']
+        },
+        "Column": {
+            moduleName: 'corechart',
+            className: 'ColumnChart',
+            events: ['animationfinish', 'select', 'ready', 'onmouseover', 'onmouseout', 'click']
+        },
+        "Combo": {
+            moduleName: 'corechart',
+            className: 'ComboChart',
+            events: ['animationfinish', 'select', 'ready', 'onmouseover', 'onmouseout', 'click']
+        },
         "Gantt": {
             moduleName: 'gantt',
-            strategy: 'DefaultDataTableStrategy',
             className: 'Gantt',
             events: ['select', 'ready']
+        },
+        "Gauge": {
+            moduleName: 'gauge',
+            className: 'Gauge'
+        },
+        "GeoChart": {
+            moduleName: 'geochart',
+            className: 'GeoChart',
+            events: ['select', 'ready', 'regionClick']
+        },
+        "Histogram": {
+            moduleName: 'corechart',
+            className: 'Histogram',
+            events: ['animationfinish', 'select', 'ready', 'onmouseover', 'onmouseout', 'click']
+        },
+        "Line": {
+            moduleName: 'corechart',
+            className: 'LineChart',
+            events: ['animationfinish', 'select', 'ready', 'onmouseover', 'onmouseout', 'click']
+        },
+
+        "Map": {
+            moduleName: 'map',
+            className: 'Map',
+            events: ['select']
+        },
+        "Org": {
+            moduleName: 'orgchart',
+            className: 'OrgChart',
+            events: ['select', 'onmouseover', 'onmouseout', 'ready', 'collapse']
+        },
+        "Pie": {
+            moduleName: 'corechart',
+            className: 'PieChart',
+            events: ['animationfinish', 'select', 'ready', 'onmouseover', 'onmouseout', 'click']
+        },
+        "Sankey": {
+            moduleName: 'sankey',
+            className: 'Sankey',
+            events: ['select', 'ready', 'onmouseover', 'onmouseout']
         }
     };
 
@@ -218,6 +277,28 @@ window['googleChartEvents$$'] = {};
     }
 })();
 /**
+ * Created by emt on 21.05.2017.
+ */
+(function () {
+
+    angular.module('angularjs-google-chart').provider('GoogleChart', ChartProviderFn);
+
+    function ChartProviderFn() {
+
+        this.setMapApiKey = function () {
+            this.mapApiKey = arguments[0];
+        };
+
+
+        this.$get = function () {
+            var self = this;
+            return {
+                mapApiKey: self.mapApiKey
+            };
+        };
+    }
+})();
+/**
  * Created by emt on 19.05.2017.
  */
 (function () {
@@ -268,6 +349,87 @@ window['googleChartEvents$$'] = {};
     };
     angular.module('angularjs-google-chart')
         .value('GoogleChartLoaderConfig', config);
+})();
+/**
+ * Created by emt on 19.05.2017.
+ */
+(function () {
+
+    angular.module('angularjs-google-chart').factory('DefaultChartStrategy', DefaultChartStrategyFactory);
+
+    function DefaultChartStrategyFactory() {
+        return DefaultChartStrategy;
+    }
+
+    function DefaultChartStrategy(google, element, scope, GoogleChartConfig, GoogleChartHelper, chartModule, eventListenerClass) {
+        this.google = google;
+        this.chart = null;
+        this.$element = element;
+        this.$scope = scope;
+        this.listenerList = [];
+        this.GoogleChartConfig = GoogleChartConfig;
+        this.GoogleChartHelper = GoogleChartHelper;
+        this.chartModule = chartModule;
+        this.eventListenerClass = eventListenerClass;
+    }
+
+    DefaultChartStrategy.prototype.setupData = function (rawData) {
+        var data;
+        if (rawData.cols && rawData.rows && rawData.cols.length > 0) {
+            data = new self.google.visualization.DataTable();
+            rawData.cols.forEach(function (each) {
+                data.addColumn(each);
+            });
+            data.addRows(rawData.rows);
+        } else if ((!rawData.cols || rawData.cols.length === 0) && rawData.rows) {
+            var firstDataStatus = !!rawData['firstRowAsData'];
+            data = new self.google.visualization.arrayToDataTable(rawData.rows, firstDataStatus);
+            if (rawData.dataView && rawData.dataView.cols) {
+                var view = new google.visualization.DataView(data);
+                view.setColumns(rawData.dataView.cols);
+                return view;
+            }
+        }
+        if (!data)
+            throw 'data setup failed';
+        return data;
+    };
+
+    DefaultChartStrategy.prototype.setupChart = function () {
+        var self = this;
+        this.chart = new this.google
+            .visualization[self.chartModule.className](this.$element[0]);
+        return this.chart;
+    };
+
+    DefaultChartStrategy.prototype.onChartReady = function (chart) {
+        this.chart = chart;
+    };
+
+    DefaultChartStrategy.prototype.destroy = function () {
+        var self = this;
+        this.listenerList.forEach(function (each) {
+            self.google.visualization.events.removeListener(each);
+        })
+    };
+    DefaultChartStrategy.prototype.registerEvent = function (str, event) {
+        var self = this;
+        var eventListenerWrapper = new this.eventListenerClass(str, self.chart);
+        var listener = self.google.visualization
+            .events.addListener(self.chart, event.eventName, function () {
+                var list = [str];
+                if (arguments && arguments.length > 0) {
+                    for (var i = 0; i < arguments.length; i++) {
+                        var current = arguments[i];
+                        if (current)
+                            list.push(current);
+                    }
+                }
+                eventListenerWrapper[event.eventMethod].apply(self, list);
+            });
+        self.listenerList.push(listener);
+    };
+
 })();
 /**
  * Created by emt on 20.05.2017.
@@ -374,140 +536,19 @@ window['googleChartEvents$$'] = {};
     };
 })();
 /**
- * Created by emt on 20.05.2017.
- */
-(function () {
-    angular.module('angularjs-google-chart').factory('DefaultArrayToDataTable', DefaultArrayToDataTableFactory);
-
-    DefaultArrayToDataTableFactory.$inject = ['DefaultChartStrategy', 'GoogleChartHelper'];
-
-    function DefaultArrayToDataTableFactory(DefaultChartStrategy, GoogleChartHelper) {
-        GoogleChartHelper.extend(DefaultChartStrategy, DefaultArrayToDataTable);
-
-        function DefaultArrayToDataTable() {
-            DefaultChartStrategy.apply(this, arguments);
-        }
-        DefaultArrayToDataTable.prototype.setupData = function (rawData) {
-            var self = this;
-            var data = new self.google.visualization.arrayToDataTable(rawData.rows);
-            if (rawData.dataView && rawData.dataView.cols) {
-                var view = new google.visualization.DataView(data);
-                view.setColumns(rawData.dataView.cols);
-                return view;
-            }
-            return data;
-        };
-        return DefaultArrayToDataTable;
-    }
-
-})();
-/**
- * Created by emt on 19.05.2017.
- */
-(function () {
-    angular.module('angularjs-google-chart').factory('DefaultDataTableStrategy', DefaultDataTableStrategyFactory);
-
-    DefaultDataTableStrategyFactory.$inject = ['DefaultChartStrategy', 'GoogleChartHelper'];
-
-    function DefaultDataTableStrategyFactory(DefaultChartStrategy, GoogleChartHelper) {
-        GoogleChartHelper.extend(DefaultChartStrategy, DefaultDataTableStrategy);
-
-        function DefaultDataTableStrategy() {
-            DefaultChartStrategy.apply(this, arguments);
-        }
-        DefaultDataTableStrategy.prototype.setupData = function (rawData) {
-            var self = this;
-            var data = new self.google.visualization.DataTable();
-            rawData.cols.forEach(function (each) {
-                data.addColumn(each);
-            });
-            data.addRows(rawData.rows);
-            return data;
-        };
-        DefaultDataTableStrategy.prototype.setupChart = function () {
-            var self = this;
-            this.chart = new this.google
-                .visualization[self.chartModule.className](this.$element[0]);
-            return this.chart;
-        };
-        return DefaultDataTableStrategy;
-    }
-
-})();
-/**
- * Created by emt on 19.05.2017.
- */
-(function () {
-
-    angular.module('angularjs-google-chart').factory('DefaultChartStrategy', DefaultChartStrategyFactory);
-
-    function DefaultChartStrategyFactory() {
-        return DefaultChartStrategy;
-    }
-
-    function DefaultChartStrategy(google, element, scope, GoogleChartConfig, GoogleChartHelper, chartModule, eventListenerClass) {
-        this.google = google;
-        this.chart = null;
-        this.$element = element;
-        this.$scope = scope;
-        this.listenerList = [];
-        this.GoogleChartConfig = GoogleChartConfig;
-        this.GoogleChartHelper = GoogleChartHelper;
-        this.chartModule = chartModule;
-        this.eventListenerClass = eventListenerClass;
-    }
-
-    DefaultChartStrategy.prototype.setupData = function () {
-        throw 'Must be implemented setupData';
-    };
-
-    DefaultChartStrategy.prototype.setupChart = function () {
-        var self = this;
-        this.chart = new this.google
-            .visualization[self.chartModule.className](this.$element[0]);
-        return this.chart;
-    };
-
-    DefaultChartStrategy.prototype.onChartReady = function (chart) {
-        this.chart = chart;
-    };
-
-    DefaultChartStrategy.prototype.destroy = function () {
-        var self = this;
-        this.listenerList.forEach(function (each) {
-            self.google.visualization.events.removeListener(each);
-        })
-    };
-    DefaultChartStrategy.prototype.registerEvent = function (str, event) {
-        var self = this;
-        var eventListenerWrapper = new this.eventListenerClass(str, self.chart);
-        var listener = self.google.visualization
-            .events.addListener(self.chart, event.eventName, function () {
-                var list = [str];
-                if (arguments && arguments.length > 0) {
-                    for (var i = 0; i < arguments.length; i++) {
-                        var current = arguments[i];
-                        if (current)
-                            list.push(current);
-                    }
-                }
-                eventListenerWrapper[event.eventMethod].apply(self, list);
-            });
-        self.listenerList.push(listener);
-    };
-
-})();
-/**
  * Created by emt on 18.05.2017.
  */
 (function () {
+    var defaultDataListener = 'DefaultDataListener';
+    var defaultEventListener = 'DefaultEventListener';
+    var defaultChartStrategy = 'DefaultChartStrategy';
 
     angular.module('angularjs-google-chart')
         .controller('GoogleChartController', GoogleChartControllerFn);
     GoogleChartControllerFn.$inject = ['$scope', '$element', 'GoogleChartLoader',
         '$timeout', 'GoogleChartConstants', 'GoogleChartLoaderConfig', '$attrs', '$q',
-        '$injector', '$parse', '$rootScope', 'GoogleChartConfig', 'GoogleChartHelper'];
-    function GoogleChartControllerFn(x, y, z, x1, a, b, c, d, e, f, g, h, i) {
+        '$injector', '$parse', '$rootScope', 'GoogleChartConfig', 'GoogleChartHelper', 'GoogleChart'];
+    function GoogleChartControllerFn(x, y, z, x1, a, b, c, d, e, f, g, h, i, k) {
         this.$scope = x;
         this.$element = y;
         this.GoogleChartLoader = z;
@@ -532,6 +573,10 @@ window['googleChartEvents$$'] = {};
         this.chart = null;
         this.chartDataStr = null;
         this.chartId = new Date().getTime();
+        this.GoogleChart = k;
+        this.dataListenerCLASS = defaultDataListener;
+        this.eventListenerCLASS = defaultEventListener;
+        this.chartStrategyCLASS = defaultChartStrategy;
     }
 
     GoogleChartControllerFn.prototype.init = function () {
@@ -582,17 +627,31 @@ window['googleChartEvents$$'] = {};
         var self = this;
         var defer = self.$q.defer();
         var version = self.GoogleChartLoaderConfig.version;
-        self.google.charts.load(version, {
+        var options = {
             packages: [self.chartModule.moduleName]
             , callback: function () {
                 defer.resolve();
             }
-        });
+        };
+        options = self.extraOptionJob(options);
+        self.google.charts.load(version, options);
         return defer.promise;
     };
+
+    GoogleChartControllerFn.prototype.extraOptionJob = function (opt) {
+        var self = this;
+        switch (self.chartModule.moduleName) {
+            case "geochart":
+            case "map":
+                opt['mapsApiKey'] = self.GoogleChart.mapApiKey;
+                break;
+        }
+        return opt;
+    };
+
     GoogleChartControllerFn.prototype.initDataListener = function () {
         var self = this;
-        var dataListenerClass = (self.$injector.get(self.chartModule.dataListener || "DefaultDataListener"));
+        var dataListenerClass = (self.$injector.get(self.dataListenerCLASS));
         this.dataListenerInstance = new dataListenerClass(self.chartDataStr,
             self.chart,
             self.chartOptionsStr,
@@ -603,8 +662,8 @@ window['googleChartEvents$$'] = {};
     };
     GoogleChartControllerFn.prototype.setup = function () {
         var self = this;
-        var strategyClass = (self.$injector.get(self.chartModule.strategy));
-        var eventListenerClass = (self.$injector.get(self.chartModule.eventListener || "DefaultEventListener"));
+        var strategyClass = (self.$injector.get(self.chartStrategyCLASS));
+        var eventListenerClass = (self.$injector.get(self.eventListenerCLASS));
         self.strategyInstance = new strategyClass(self.google, self.$element,
             self.$scope, self.GoogleChartConfig, self.GoogleChartHelper, self.chartModule, eventListenerClass);
         this.chart = self.strategyInstance.setupChart();

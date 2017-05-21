@@ -38,6 +38,16 @@ window['googleChartEvents$$'] = {};
             eventName: 'ready',
             eventMethod: 'onDefault',
             directiveName: 'gceReady'
+        },
+        REGION_CLICK: {
+            eventName: 'regionClick',
+            eventMethod: 'onDefault',
+            directiveName: 'gceRegionClick'
+        },
+        COLLAPSE: {
+            eventName: 'collapse',
+            eventMethod: 'onDefault',
+            directiveName: 'gceCollapse'
         }
     }
 })(window['googleChartEvents$$']);

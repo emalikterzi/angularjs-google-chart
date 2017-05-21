@@ -14,5 +14,6 @@ declare module "angularjs-google-chart" {
         type: string
         id: any
         pattern: any
+        role:any
     }
 }

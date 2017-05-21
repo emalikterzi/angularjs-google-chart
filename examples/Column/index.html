@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html data-ng-app="app" lang="en">
+<head>
+    <script type="application/javascript" src="../../node_modules/angular/angular.js"></script>
+    <script type="application/javascript" src="../../dist/app.js"></script>
+    <script type="application/javascript" src="app.js"></script>
+
+</head>
+<body data-ng-controller="TestController">
+<div>
+
+    <table>
+        <thead>
+        <tr>
+            <td align="center">Simple</td>
+            <td align="center">Advanced</td>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <th>
+                <div google-chart="Column"
+                     gc-data="chart"
+                     gc-options="options"
+                     gce-click="onClick()"
+                     gce-select="onSelect()"
+                     gce-ready="onReady()"
+                     gce-on-mouse-over="mouseOver()"
+                     gce-on-mouse-out="mouseOut()"
+                     gce-animation-finish="animateFinish()"
+                ></div>
+            </th>
+            <th>
+                <div google-chart="Column"
+                     gc-data="chart2"
+                     gc-options="options"
+                     gce-click="onClick()"
+                     gce-select="onSelect()"
+                     gce-ready="onReady()"
+                     gce-on-mouse-over="mouseOver()"
+                     gce-on-mouse-out="mouseOut()"
+                     gce-animation-finish="animateFinish()"
+                ></div>
+            </th>
+        </tr>
+        </tbody>
+
+    </table>
+
+</div>
+<!--<div id="chart_div"></div>-->
+</body>
+</html>

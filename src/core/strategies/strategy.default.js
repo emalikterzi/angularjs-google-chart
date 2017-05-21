@@ -21,8 +21,26 @@
         this.eventListenerClass = eventListenerClass;
     }
 
-    DefaultChartStrategy.prototype.setupData = function () {
-        throw 'Must be implemented setupData';
+    DefaultChartStrategy.prototype.setupData = function (rawData) {
+        var data;
+        if (rawData.cols && rawData.rows && rawData.cols.length > 0) {
+            data = new self.google.visualization.DataTable();
+            rawData.cols.forEach(function (each) {
+                data.addColumn(each);
+            });
+            data.addRows(rawData.rows);
+        } else if ((!rawData.cols || rawData.cols.length === 0) && rawData.rows) {
+            var firstDataStatus = !!rawData['firstRowAsData'];
+            data = new self.google.visualization.arrayToDataTable(rawData.rows, firstDataStatus);
+            if (rawData.dataView && rawData.dataView.cols) {
+                var view = new google.visualization.DataView(data);
+                view.setColumns(rawData.dataView.cols);
+                return view;
+            }
+        }
+        if (!data)
+            throw 'data setup failed';
+        return data;
     };
 
     DefaultChartStrategy.prototype.setupChart = function () {
