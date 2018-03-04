@@ -26,10 +26,23 @@ app.controller('TestController', function ($scope, $timeout, $interval) {
                 2]
         }
     };
+    $timeout(function () {
+        $scope.chart.rows= [
+            ['Element', 'Density', {role: 'style'}],
+            ['Copper', 12.94, '#b87333'],            // RGB value
+            ['Silver', 11.49, 'silver'],            // English color name
+            ['Gold', 17.30, 'gold'],
+            ['Platinum', 19.45, 'color: #e5e4e2'] // CSS-style declaration
+        ];
+    },5000)
     $scope.options = {
         title: "Density of Precious Metals, in g/cm^3",
         width: 600,
         height: 400,
+        animation:{
+            duration: 500,
+            easing: 'out'
+        },
         bar: {groupWidth: "95%"},
         legend: {position: "none"},
     };

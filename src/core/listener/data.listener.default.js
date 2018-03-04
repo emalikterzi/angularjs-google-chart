@@ -33,14 +33,13 @@
                 self.drawAsync();
             }
         }, true);
-        var optionsLsitner =
-            self.$scope.$watch(self.chartOptionsStr, function (n) {
-                if (n && !angular.equals(self.chartOptions, n)) {
-                    self.chartOptions = n;
-                    self.drawAsync();
-                }
-            }, true);
-        self.watcherList.push(optionsLsitner);
+        var optionsListener = self.$scope.$watch(self.chartOptionsStr, function (n) {
+            if (n && !angular.equals(self.chartOptions, n)) {
+                self.chartOptions = n;
+                self.drawAsync();
+            }
+        }, true);
+        self.watcherList.push(optionsListener);
         self.watcherList.push(dataListener);
         return self.initialDefer.promise;
     };
@@ -54,8 +53,9 @@
     };
     DefaultDataListener.prototype.destroy = function () {
         var self = this;
-        self.watcherList.forEach(function (each) {
-            each();
+        self.watcherList.forEach(function (watcherFn) {
+            if (watcherFn)
+                watcherFn();
         })
     }
 })();

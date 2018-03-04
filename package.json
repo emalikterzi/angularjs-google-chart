@@ -1,6 +1,6 @@
 {
   "name": "angularjs-google-chart",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Google Chart wrapper for angularjs ",
   "main": "dist/app.js",
   "devDependencies": {
@@ -27,7 +27,8 @@
     "chart"
   ],
   "scripts": {
-    "prepublish": "gulp build"
+    "build":"gulp build",
+    "start":"gulp"
   },
   "author": "Enes Malik Terzi",
   "license": "MIT",
